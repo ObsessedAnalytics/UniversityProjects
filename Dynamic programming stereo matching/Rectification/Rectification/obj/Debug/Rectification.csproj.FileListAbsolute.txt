@@ -1,0 +1,11 @@
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Accord.dll.config
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Rectification.exe.config
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Rectification.exe
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Rectification.pdb
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Accord.dll
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Accord.Math.dll
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Accord.xml
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\bin\Debug\Accord.Math.xml
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\obj\Debug\Rectification.csprojResolveAssemblyReference.cache
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\obj\Debug\Rectification.exe
+C:\Users\riki\Google Drive\University\Postgraduate\CS773\Assignment4\Rectification\Rectification\obj\Debug\Rectification.pdb
