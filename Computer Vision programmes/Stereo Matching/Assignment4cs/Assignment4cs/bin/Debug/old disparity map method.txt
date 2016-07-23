@@ -1,0 +1,41 @@
+        private static double[,] DisparityMap(double[,] left, double[,] right)
+        {
+            int windowHeight = 5;
+            int height = left.GetLength(0);
+            int width = left.GetLength(1);
+            double[,] disparityMap = new double[height, width];
+            double currUtility = width;
+            double currDisp = 0;
+            int maxDisparity = 0;
+            int minDisparity = width;
+            for(int y = windowHeight; y < height-windowHeight; y++)
+            {
+                for(int x = windowHeight; x < width-windowHeight; x++)
+                {
+                    double pixelRight = right[y, x];
+                    double pixelLeft = 0;
+                    for(int a = 7; a < width-7; a++)
+                    {
+                        pixelLeft = left[y, a];
+                        double newUtility = 10*Math.Abs(pixelLeft - pixelRight) + (a-x);
+                        if (newUtility < currUtility)
+                        {
+                            {
+                                currUtility = newUtility;
+                                currDisp = Math.Abs(x - a);
+                                
+                            }
+                        }
+                        if (currDisp > maxDisparity) maxDisparity = (int)currDisp;
+                        if (currDisp < minDisparity) minDisparity = (int)currDisp;
+
+                    }
+                    currUtility = width;
+                    disparityMap[y, x] = currDisp;
+                }
+            }
+            Console.WriteLine(maxDisparity);
+            Console.WriteLine(minDisparity);
+            return disparityMap;
+
+        }

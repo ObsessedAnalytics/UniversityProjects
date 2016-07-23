@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Media;
+
+namespace Assignment4cs
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int windowHeight = 9;
+            int maxDisparity = 15;
+            int minDisparity = 6;
+            double[,] left = readInput("imL.png");
+            double[,] right = readInput("imR.png");
+            var disparityMap = DisparityMap(left, right, minDisparity, maxDisparity, windowHeight);
+            var bitmap = createImage(disparityMap, minDisparity, maxDisparity);
+            bitmap.Save("disparityMap.png");
+            Console.WriteLine("done");
+            Console.ReadLine();
+
+        }
+
+        private static Bitmap createImage(double[,] disparityMap, int minDisp, int maxDisp)
+        {
+            int width = disparityMap.GetLength(1);
+            int height = disparityMap.GetLength(0);
+            Bitmap result = new Bitmap(width,height);
+            for(int y = 0; y < height; y++)
+            {
+                for(int x = 0; x < width; x++)
+                {
+                    int greyscale = (int)(255.0 * ((disparityMap[y, x] - minDisp) / (maxDisp - minDisp)));
+                    //greyscale = 255 - greyscale;
+                    //int greyscale = (int)disparityMap[y, x];
+                    
+                    Color c = Color.FromArgb(greyscale, greyscale, greyscale);
+                    result.SetPixel(x, y, c);
+                }
+            }
+            return result;
+        }
+
+        private static double[,] DisparityMap(double[,] left, double[,] right, int minDisp, int maxDisp, int frame)
+        {
+            int height = left.GetLength(0);
+            int width = left.GetLength(1);
+            double[,] disparityMap = new double[height, width];
+            for(int i = 0; i < height; i++)
+            {
+                for(int j = 0; j < width; j++)
+                {
+                    double disparity = Math.Abs(maxDisp - getDisparity(left, right, i, j, minDisp, maxDisp, frame));
+                    disparityMap[i, j] = disparity;
+                }
+            }
+            return disparityMap;
+
+        }
+
+        private static double getDisparity(double[,] left, double[,] right, int y, int x, int minDisp, int maxDisp, int frame)
+        {
+            double[] cost = new double[maxDisp-minDisp];
+            int count = 0;
+            for(int i = minDisp; i < maxDisp; i++)
+            {
+                cost[count] = sumWindows(left, right, y, x, i, frame);
+                count++;
+            }
+
+            return Array.IndexOf(cost,cost.Min());
+        }
+
+        private static double sumWindows(double[,] left, double[,] right, int y, int x, int disp, int frame)
+        {
+            int leftLeft = Math.Max(0, x - frame);
+            int leftRight = Math.Min(x + frame, left.GetLength(1));
+            int leftTop = Math.Max(0, y - frame);
+            int leftBottom = Math.Min(y + frame, left.GetLength(0));
+            double cost = 0.0;
+            for(int i = leftTop; i < leftBottom; i++)
+            {
+                for(int j = leftLeft; j < leftRight; j++)
+                {
+                    if (j - disp < 0) { cost = sumSqaures(left[i, j], right[i, j]); }
+                    else { cost = sumSqaures(left[i, j], right[i, j - disp]); }
+                }
+
+            }
+
+            return cost;
+
+
+        }
+
+        private static double sumSqaures(double v1, double v2)
+        {
+            return Math.Pow(v1, 2) + Math.Pow(v2, 2);
+        }
+
+        public static double[,] readInput(string image)
+        {
+
+            Bitmap img = new Bitmap(image);
+            double[,] imgMatrix = new double[img.Height, img.Width];
+            for (int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    Color pixel = img.GetPixel(i, j);
+                    double red = pixel.R * 0.3;
+                    double green = pixel.G * 0.6;
+                    double blue = pixel.B * 0.1;
+                    imgMatrix[j, i] = red + green + blue;
+                }
+            }
+
+            return imgMatrix;
+        }
+
+
+        public static void printImage(double[,] avgLeft, double[,] avgRight)
+        {
+            using (StreamWriter file = new StreamWriter("left.csv"))
+            {
+                file.WriteLine("Left,Right");
+                for (int i = 0; i < avgLeft.GetLength(1); i++)
+                {
+                    file.Write(avgLeft[100, i]);
+                    file.Write(",");
+                    file.Write((avgRight[100, i]));
+                    file.WriteLine();
+                }
+            }
+        }
+
+    }
+}
